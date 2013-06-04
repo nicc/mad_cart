@@ -37,7 +37,3 @@ module MadCart
 
   end
 end
-
-
-# Etsy.api_key = '4j3amz573gly866229iixzri'
-# Etsy.environment = :production

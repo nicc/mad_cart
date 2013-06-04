@@ -16,7 +16,7 @@ describe MadCart::Model::Product do
     c.attributes.should eql(attrs)
   end
 
-  it "allows attributes to be overwritten" do
+  it "allows attribute names to be overwritten" do
     MadCart.configure do |config|
       config.attribute_map :product, {:square_image_url => :thumbnail}
     end

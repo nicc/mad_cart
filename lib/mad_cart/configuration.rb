@@ -17,6 +17,12 @@ module MadCart
       @data[:attribute_maps][data_model.to_s] = attributes
     end
 
+    def include_attributes(args={})
+      setup_data
+
+      @data[:included_attributes].merge!(args)
+    end
+
     def data
       setup_data
       Data.new(@data)
@@ -26,6 +32,7 @@ module MadCart
     def setup_data
       @data ||= {:stores => []}
       @data[:attribute_maps] ||= {}
+      @data[:included_attributes] ||= {}
     end
 
     class Data < OpenStruct

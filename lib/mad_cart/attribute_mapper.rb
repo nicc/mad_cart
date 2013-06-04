@@ -10,7 +10,7 @@ module MadCart
     end
 
     def initial_attributes
-      Hash[self.class.required_attrs.map{|a| [a.to_s, self.send(a)]}]
+      Hash[self.class.exposed_attributes.map{|a| [a.to_s, self.send(a)]}]
     end
 
   end

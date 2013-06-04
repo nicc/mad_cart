@@ -129,6 +129,16 @@ describe MadCart::Store::Base do
 
       MyStore.new.products.each{|p| p.should be_a(MadCart::Model::Product) }
     end
+
+    it "can be configured to retrieve additional attributes" do
+      MadCart.configure do |config|
+        config.include_attributes :products => [:external_id]
+      end
+
+      MyStore.class_eval do
+        fetch :products, :with => Proc.new {   }
+      end
+    end
   end
 
   describe "format" do

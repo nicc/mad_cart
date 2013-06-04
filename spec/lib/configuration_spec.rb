@@ -39,6 +39,14 @@ describe "configuration" do
       MadCart.config.attribute_maps["product"].should == {"name" => "title"}
     end
 
+    it "allows additional attributes to be included in models" do
+      MadCart.configure do |config|
+        config.include_attributes :products => [:external_id, :url]
+      end
+
+      MadCart.config.included_attributes[:products].should == [:external_id, :url]
+    end
+
   end
 
 end
