@@ -1,20 +1,10 @@
 module MadCart
   module Store
     class BigCommerce
+      include MadCart::Store::Base
 
-      class InvalidStore < StandardError; end;
-      class ServerError < StandardError; end;
-      class InvalidCredentials < StandardError; end;
-
-      attr_reader :connection, :api_key, :store_url, :username
-
-      def initialize(args)
-        create_connection(args)
-      end
-
-      def customers
-        return get_customer_hashes.map{|ch| MadCart::Customer.new(ch) }
-      end
+      create_connection_with :create_connection, :requires => [:api_key, :store_url, :username]
+      fetch :customers, :with => :get_customer_hashes
 
       private
 
@@ -70,17 +60,9 @@ module MadCart
       end
 
       def create_connection(args={})
-        validate_connection_args(args)
-
         @connection = Faraday.new(:url => api_url_for(args[:store_url]))
         @connection.basic_auth(args[:username], args[:api_key])
-      end
-
-      def validate_connection_args(args={})
-        [:api_key, :store_url, :username].each do |key|
-          raise(ArgumentError, "missing argument: #{key}") if !args.include? key
-          instance_variable_set("@#{key}".to_sym, args[key])
-        end
+        @connection
       end
     end
   end
