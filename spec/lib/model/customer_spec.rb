@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe MadCart::Customer do
+describe MadCart::Model::Customer do
 
   before(:each) do
     clear_config
@@ -8,7 +8,7 @@ describe MadCart::Customer do
 
   it "returns the default attributes" do
     attrs = {"first_name" => 'Bob', "last_name" => 'Sagat', "email" => 'bob@sagat.com'}
-    c = MadCart::Customer.new(attrs)
+    c = MadCart::Model::Customer.new(attrs)
 
     c.attributes.should eql(attrs)
   end
@@ -18,13 +18,13 @@ describe MadCart::Customer do
       config.attribute_map :customer, {:first_name => :name}
     end
 
-    c = MadCart::Customer.new(:first_name => 'Bob', :last_name => 'Sagat', :email => 'bob@sagat.com')
+    c = MadCart::Model::Customer.new(:first_name => 'Bob', :last_name => 'Sagat', :email => 'bob@sagat.com')
 
     c.attributes.should eql({"name" => 'Bob', "last_name" => 'Sagat', "email" => 'bob@sagat.com'})
   end
 
   it "exposes all additional attributes provided by the api" do
-    c = MadCart::Customer.new("first_name" => 'Bob', "last_name" => 'Sagat', "email" => 'bob@sagat.com', "with" => 'some', "additional" => 'fields' )
+    c = MadCart::Model::Customer.new("first_name" => 'Bob', "last_name" => 'Sagat', "email" => 'bob@sagat.com', "with" => 'some', "additional" => 'fields' )
 
     c.additional_attributes.should eql({"with" => 'some', "additional" => 'fields'})
   end
@@ -40,17 +40,17 @@ describe MadCart::Customer do
 
     it "requires first_name" do
       @args.delete(:first_name)
-      lambda{ MadCart::Customer.new(@args)  }.should raise_error(ArgumentError)
+      lambda{ MadCart::Model::Customer.new(@args)  }.should raise_error(ArgumentError)
     end
 
     it "requires last_name" do
       @args.delete(:last_name)
-      lambda{ MadCart::Customer.new(@args)  }.should raise_error(ArgumentError)
+      lambda{ MadCart::Model::Customer.new(@args)  }.should raise_error(ArgumentError)
     end
 
     it "requires email" do
       @args.delete(:email)
-      lambda{ MadCart::Customer.new(@args)  }.should raise_error(ArgumentError)
+      lambda{ MadCart::Model::Customer.new(@args)  }.should raise_error(ArgumentError)
     end
 
   end

@@ -64,12 +64,12 @@ module MadCart
       private :configured_connection_args
 
       def ensure_model_format(model, results)
-        results.first.is_a?(MadCartModel) ? results : map_to_madcart_model(model, results)
+        results.first.is_a?(MadCart::Model::Base) ? results : map_to_madcart_model(model, results)
       end
       private :ensure_model_format
 
       def map_to_madcart_model(model, results)
-        results.map {|args| "MadCart::#{model.to_s.classify}".constantize.new(args) }
+        results.map {|args| "MadCart::Model::#{model.to_s.classify}".constantize.new(args) }
       end
       private :map_to_madcart_model
 

@@ -81,8 +81,8 @@ describe MadCart::Store::Base do
         end
       end
 
-      result = double(MadCart::Product)
-      MadCart::Product.should_receive(:new).with({:some => 'attrs'}).and_return(result)
+      result = double(MadCart::Model::Product)
+      MadCart::Model::Product.should_receive(:new).with({:some => 'attrs'}).and_return(result)
       MyStore.new.products.should == [result]
     end
 
@@ -91,8 +91,8 @@ describe MadCart::Store::Base do
         fetch :products, :with => Proc.new { [{:some => 'attrs'}, {:some => 'attrs'}] }
       end
 
-      result = double(MadCart::Product)
-      MadCart::Product.should_receive(:new).twice.with({:some => 'attrs'}).and_return(result)
+      result = double(MadCart::Model::Product)
+      MadCart::Model::Product.should_receive(:new).twice.with({:some => 'attrs'}).and_return(result)
       MyStore.new.products.should == [result, result]
     end
 
@@ -104,7 +104,7 @@ describe MadCart::Store::Base do
         fetch :products, :with => Proc.new { [attrs, attrs] }
       end
 
-      MyStore.new.products.each{|p| p.should be_a(MadCart::Product) }
+      MyStore.new.products.each{|p| p.should be_a(MadCart::Model::Product) }
     end
 
     it "returns instances of the mad cart model if the fetch method returns them" do
@@ -112,10 +112,10 @@ describe MadCart::Store::Base do
              "url" => 'path/to/product', "currency_code" => 'ZAR',
              "image_url" => 'path/to/image', "square_image_url" => 'path/to/square/image'}
       MyStore.class_eval do
-        fetch :products, :with => Proc.new { [MadCart::Product.new(attrs), MadCart::Product.new(attrs)] }
+        fetch :products, :with => Proc.new { [MadCart::Model::Product.new(attrs), MadCart::Model::Product.new(attrs)] }
       end
 
-      MyStore.new.products.each{|p| p.should be_a(MadCart::Product) }
+      MyStore.new.products.each{|p| p.should be_a(MadCart::Model::Product) }
     end
 
     it "returns instances of the mad cart model if the format method returns them" do
@@ -124,10 +124,10 @@ describe MadCart::Store::Base do
              "image_url" => 'path/to/image', "square_image_url" => 'path/to/square/image'}
       MyStore.class_eval do
         fetch :products, :with => Proc.new { [attrs, attrs] }
-        format :products, :with => Proc.new {|p| MadCart::Product.new(p) }
+        format :products, :with => Proc.new {|p| MadCart::Model::Product.new(p) }
       end
 
-      MyStore.new.products.each{|p| p.should be_a(MadCart::Product) }
+      MyStore.new.products.each{|p| p.should be_a(MadCart::Model::Product) }
     end
   end
 
@@ -147,7 +147,7 @@ describe MadCart::Store::Base do
       end
 
       store = MyStore.new
-      store.should_receive(:format_method).with(:one => 1).and_return(double(MadCart::Product))
+      store.should_receive(:format_method).with(:one => 1).and_return(double(MadCart::Model::Product))
       store.stub!(:ensure_model_format)
       store.products
     end

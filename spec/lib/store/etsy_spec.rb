@@ -18,7 +18,7 @@ describe MadCart::Store::Etsy do
 
         first_product = api.products.first
 
-        first_product.should be_a(MadCart::Product)
+        first_product.should be_a(MadCart::Model::Product)
         first_product.name.should_not be_nil
         first_product.price.should_not be_nil
         first_product.external_id.should_not be_nil

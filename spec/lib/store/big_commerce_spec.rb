@@ -32,7 +32,7 @@ describe MadCart::Store::BigCommerce do
           )
 
           api.customers.size.should be > 0
-          api.customers.first.should be_a(MadCart::Customer)
+          api.customers.first.should be_a(MadCart::Model::Customer)
         end
       end
 

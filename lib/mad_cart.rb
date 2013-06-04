@@ -10,11 +10,11 @@ require 'faraday'
 require 'mad_cart/configuration'
 require 'mad_cart/attribute_mapper'
 require 'mad_cart/inheritable_attributes'
-require 'mad_cart/mad_cart_model'
 
-# data objects
-require 'mad_cart/customer'
-require 'mad_cart/product'
+# models
+require 'mad_cart/model/base'
+require 'mad_cart/model/customer'
+require 'mad_cart/model/product'
 
 # stores
 require 'mad_cart/store/base'
