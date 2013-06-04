@@ -6,7 +6,7 @@ module MadCart
     end
 
     def mapping_hash
-      MadCart.config.attribute_maps[self.class.to_s.demodularise.underscore] || {}
+      MadCart.config.attribute_maps[self.class.to_s.demodulize.underscore] || {}
     end
 
     def initial_attributes

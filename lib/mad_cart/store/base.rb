@@ -59,7 +59,7 @@ module MadCart
       private :set_init_args
 
       def configured_connection_args
-        MadCart.config.send(self.class.to_s.demodularise.underscore) || {}
+        MadCart.config.send(self.class.to_s.demodulize.underscore) || {}
       end
       private :configured_connection_args
 
@@ -69,7 +69,7 @@ module MadCart
       private :ensure_model_format
 
       def map_to_madcart_model(model, results)
-        results.map {|args| model.to_s.classify.constantize.new(args) }
+        results.map {|args| "MadCart::#{model.to_s.classify}".constantize.new(args) }
       end
       private :map_to_madcart_model
 

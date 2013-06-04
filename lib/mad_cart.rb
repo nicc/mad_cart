@@ -3,10 +3,10 @@ require 'json'
 require 'singleton'
 
 # gems
+require 'active_support/core_ext'
 require 'faraday'
 
 # core
-require 'extensions/string'
 require 'mad_cart/configuration'
 require 'mad_cart/attribute_mapper'
 require 'mad_cart/inheritable_attributes'
