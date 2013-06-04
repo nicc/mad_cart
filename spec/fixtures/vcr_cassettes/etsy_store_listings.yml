@@ -2,7 +2,7 @@
 - !ruby/struct:VCR::HTTPInteraction
   request: !ruby/struct:VCR::Request
     method: :get
-    uri: http://openapi.etsy.com:80/v2/shops/?api_key=a_made_up_key
+    uri: http://openapi.etsy.com:80/v2/shops/a_made_up_store?api_key=a_made_up_key
     body:
     headers:
       accept-encoding:

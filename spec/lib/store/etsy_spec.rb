@@ -13,7 +13,7 @@ describe MadCart::Store::Etsy do
 
     it "returns products" do
       VCR.use_cassette('etsy_store_listings') do
-        api = MadCart::Store::Etsy.new()
+        api = MadCart::Store::Etsy.new(:store_name => 'a_made_up_store')
         api.products.size.should == 1
 
         first_product = api.products.first

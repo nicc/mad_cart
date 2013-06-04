@@ -7,9 +7,17 @@ class String
     tr("-", "_").
     downcase
   end
-  
+
   def demodularise
     self.split('::').last
+  end
+
+  def classify
+    self
+  end
+
+  def constantize
+    MadCart::Product
   end
 
 end

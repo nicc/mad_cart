@@ -4,45 +4,34 @@ require 'money'
 module MadCart
   module Store
     class Etsy
-      DEFAULT_ETSY_LIMIT = 25
-
-      attr_accessor :store_name
-      attr_reader :shop
-
-      def initialize(args={})
-        self.store_name = args.delete(:store_name)
-        create_connection(args)
-      end
-
-      def products
-        return get_product_hashes.map{|ph| MadCart::Product.new(ph) }
-      end
+      include MadCart::Store::Base
+      
+      create_connection_with :create_connection, :requires => [:store_name, :api_key]
+      fetch :products, :with => :get_products
+      format :products, :with => :format_products
 
       private
+      def get_products
+        connection.listings(:active, {:includes => 'Images'})
+      end
 
-      def get_product_hashes
-        self.shop.listings(:active, {:includes => 'Images'}).map {|listing|
-            {
-             :external_id => listing.id,
-             :name => listing.title,
-             :description => listing.description,
-             :price => "#{listing.price} #{listing.currency}".to_money.format,
-             :url => listing.url,
-             :currency_code => listing.currency,
-             :image_url => listing.image.full,
-             :square_image_url => listing.image.square
-          }
+      def format_products(listing)
+        {
+           :external_id => listing.id,
+           :name => listing.title,
+           :description => listing.description,
+           :price => "#{listing.price} #{listing.currency}".to_money.format,
+           :url => listing.url,
+           :currency_code => listing.currency,
+           :image_url => listing.image.full,
+           :square_image_url => listing.image.square
         }
       end
 
       def create_connection(args)
-        ::Etsy.api_key = get_api_key(args) if !::Etsy.api_key || (::Etsy.api_key != get_api_key(args))
+        ::Etsy.api_key = args[:api_key] if !::Etsy.api_key || (::Etsy.api_key != args[:api_key])
         ::Etsy.environment = :production
-        @shop = ::Etsy::Shop.find(self.store_name).first
-      end
-
-      def get_api_key(args)
-        args[:api_key] || MadCart.config.etsy[:api_key]
+        return ::Etsy::Shop.find(args[:store_name]).first
       end
 
     end

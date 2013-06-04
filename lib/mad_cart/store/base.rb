@@ -18,7 +18,7 @@ module MadCart
 
       def connection
         validate_connection_args!
-        @connection ||= execute_delegate(self.class.connection_delegate, {})
+        @connection ||= execute_delegate(self.class.connection_delegate, @init_args)
         return @connection
       end
 
@@ -35,7 +35,7 @@ module MadCart
         execute_delegate(self.class.after_init_delegate, *args)
       end
       private :after_initialize
-      
+
       def validate_connection_args!
         raise(SetupError, "It appears MyStore has overrided the default MadCart::Base initialize method. " +
                           "That's fine, but please store any required connection arguments as @init_args " +
@@ -47,20 +47,31 @@ module MadCart
                             .join(', ')}") unless self.class.required_connection_args.all? {|req| @init_args.include?(req) }
       end
       private :validate_connection_args!
-      
+
       def init_args_missing?
         !self.class.required_connection_args.empty? && @init_args.nil?
       end
       private :init_args_missing?
-      
+
       def set_init_args(*args)
-        @init_args = configured_connection_args.merge(args.last || {})
+        @init_args ||= configured_connection_args.merge(args.last || {})
       end
       private :set_init_args
-      
+
       def configured_connection_args
         MadCart.config.send(self.class.to_s.demodularise.underscore) || {}
       end
+      private :configured_connection_args
+
+      def ensure_model_format(model, results)
+        results.first.is_a?(MadCartModel) ? results : map_to_madcart_model(model, results)
+      end
+      private :ensure_model_format
+
+      def map_to_madcart_model(model, results)
+        results.map {|args| model.to_s.classify.constantize.new(args) }
+      end
+      private :map_to_madcart_model
 
       module ClassMethods
         def create_connection_with(*args)
@@ -81,7 +92,9 @@ module MadCart
 
           define_method model do
             fetch_result = execute_delegate(self.class.fetch_delegates[model])
-            self.class.format_delegates[model] ? fetch_result.map{|r| execute_delegate(self.class.format_delegates[model], r)} : fetch_result
+            formatted_result = self.class.format_delegates[model] ? fetch_result.map{|r| execute_delegate(self.class.format_delegates[model], r)} : fetch_result
+
+            return ensure_model_format(model, formatted_result)
           end
         end
 
@@ -106,6 +119,7 @@ module MadCart
           return nil # if no match
         end
         private :parse_delegate
+
       end
     end
   end
