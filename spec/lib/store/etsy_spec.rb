@@ -20,13 +20,8 @@ describe MadCart::Store::Etsy do
 
         first_product.should be_a(MadCart::Model::Product)
         first_product.name.should_not be_nil
-        first_product.price.should_not be_nil
-        first_product.external_id.should_not be_nil
         first_product.description.should_not be_nil
-        first_product.url.should_not be_nil
-        first_product.currency_code.should_not be_nil
         first_product.image_url.should_not be_nil
-        first_product.square_image_url.should_not be_nil
       end
     end
 

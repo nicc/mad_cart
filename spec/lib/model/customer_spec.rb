@@ -15,7 +15,7 @@ describe MadCart::Model::Customer do
 
   it "allows attributes to be overwritten" do
     MadCart.configure do |config|
-      config.attribute_map :customer, {:first_name => :name}
+      config.attribute_map :customers, {:first_name => :name}
     end
 
     c = MadCart::Model::Customer.new(:first_name => 'Bob', :last_name => 'Sagat', :email => 'bob@sagat.com')
